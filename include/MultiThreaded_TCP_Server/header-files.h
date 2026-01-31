@@ -8,3 +8,5 @@ using namespace std;
 
 int createSocket();
 int createBind(int sock_id);
+int createListen(int sock_id);
+int createAccept(int sock_id,struct sockaddr_in* client_addr, socklen_t* client_len);
