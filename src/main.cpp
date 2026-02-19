@@ -28,7 +28,7 @@ int main()
     cout<<"Server running on port 8080"<<endl;
     
     while(true)
-    {   
+    {     
         struct sockaddr_in client_addr;
         socklen_t client_len = sizeof(client_addr);
         
@@ -46,9 +46,12 @@ int main()
         cout << "✅ Client connected! fd=" << client_id 
                 << " from " << client_ip << ":" 
                 << ntohs(client_addr.sin_port) << endl;
+
+        // client send data
+        createRecv(client_id);
         
         // Close client for now
-        //close(client_id);
+        close(client_id);
     }
 
     close(socket_id); // should not be closed in real servers
