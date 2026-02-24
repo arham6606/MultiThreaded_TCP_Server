@@ -19,4 +19,5 @@ void createRecv(int client_id)
             break;
         }
     }
+    close(client_id);
 }

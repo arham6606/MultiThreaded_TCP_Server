@@ -48,10 +48,12 @@ int main()
                 << ntohs(client_addr.sin_port) << endl;
 
         // client send data
-        createRecv(client_id);
+        thread t(createRecv,client_id);
+        t.detach();
+    // createRecv(client_id);
         
         // Close client for now
-        close(client_id);
+        //close(client_id);
     }
 
     close(socket_id); // should not be closed in real servers
