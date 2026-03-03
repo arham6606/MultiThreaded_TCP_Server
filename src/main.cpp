@@ -1,4 +1,6 @@
 #include "MultiThreaded_TCP_Server/header-files.h"
+atomic<bool>shutting_down{false};
+
 int main()
 {
     int socket_id = createSocket();
@@ -24,9 +26,13 @@ int main()
         return -1;
     }
 
+    server_fd = socket_id;
+
+    signal(SIGINT,handlerSigint);
+
     cout<<"Server running on port 8080"<<endl;
     
-    while(true)
+    while(!shutting_down.load())
     {     
         struct sockaddr_in client_addr;
         socklen_t client_len = sizeof(client_addr);
@@ -35,6 +41,10 @@ int main()
 
         if(client_id == -1)
         {
+            if(shutting_down.load())
+            {
+                break;
+            }
             perror("Accept Error");
             continue;
         }
