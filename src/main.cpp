@@ -1,5 +1,4 @@
 #include "MultiThreaded_TCP_Server/header-files.h"
-
 int main()
 {
     int socket_id = createSocket();
@@ -42,11 +41,15 @@ int main()
 
         char client_ip[INET_ADDRSTRLEN];
         inet_ntop(AF_INET, &client_addr.sin_addr, client_ip, INET_ADDRSTRLEN);
-        
+        {
+            lock_guard<mutex>lock(active_clients_mutex);
+            ++client_count;
+        }
         cout << "✅ Client connected! fd=" << client_id 
                 << " from " << client_ip << ":" 
                 << ntohs(client_addr.sin_port) << endl;
 
+                cout<<"Client Count:"<<client_count<<endl;
         // client send data
         thread t(createRecv,client_id);
         t.detach();
@@ -55,7 +58,7 @@ int main()
         // Close client for now
         //close(client_id);
     }
-
+ cout<<"End Client Count:"<<client_count<<endl;
     close(socket_id); // should not be closed in real servers
 
 }

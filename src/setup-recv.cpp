@@ -1,5 +1,6 @@
 #include "MultiThreaded_TCP_Server/header-files.h"
-
+int client_count = 0;
+mutex active_clients_mutex;
 void createRecv(int client_id)
 {
     char buffer[1024];
@@ -19,5 +20,11 @@ void createRecv(int client_id)
             break;
         }
     }
-    close(client_id);
+    {
+
+        lock_guard<mutex>lock(active_clients_mutex);
+        --client_count;
+    }
+        cout<<"end Client count"<<client_count<<endl;
+        close(client_id);
 }

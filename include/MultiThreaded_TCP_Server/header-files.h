@@ -6,6 +6,9 @@ using namespace std;
 #include <unistd.h>
 #include<arpa/inet.h>
 #include <thread>
+#include <mutex>
+extern mutex active_clients_mutex;
+extern int client_count;
 
 int createSocket();
 int createBind(int sock_id);
