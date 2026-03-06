@@ -4,17 +4,23 @@ mutex active_clients_mutex;
 void createRecv(int client_id)
 {
     char buffer[1024];
-    while (true) {
+    while (true)
+    {
         ssize_t n = recv(client_id, buffer, sizeof(buffer), 0);
-        if (n > 0) {
-            string message(buffer,buffer+n);
+        if (n > 0)
+        {
+            string message(buffer, buffer + n);
             message = "[server] " + message + "<me>";
 
-            send(client_id, message.data(), message.size(), 0);   // echo
-        } else if (n == 0) {
+            send(client_id, message.data(), message.size(), 0); // echo
+        }
+        else if (n == 0)
+        {
             // client closed
             break;
-        } else {
+        }
+        else
+        {
             // error
             perror("recv");
             break;
@@ -22,9 +28,9 @@ void createRecv(int client_id)
     }
     {
 
-        lock_guard<mutex>lock(active_clients_mutex);
+        lock_guard<mutex> lock(active_clients_mutex);
         --client_count;
     }
-        cout<<"end Client count"<<client_count<<endl;
-        close(client_id);
+    cout << "end Client count" << client_count << endl;
+    close(client_id);
 }
